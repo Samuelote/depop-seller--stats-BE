@@ -25,9 +25,8 @@ const userSchema = new Schema({
     required: true
   },
   files: {
-    type: Array,
+    type: [String],
     required: true
-
   },
   payment: {
     type: paymentInfoSchema,

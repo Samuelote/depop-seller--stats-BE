@@ -6,6 +6,8 @@ const url =
 
 mongoose.connect(
   url
-  , { useNewUrlParser: true }
+  , { useNewUrlParser: true, useUnifiedTopology: true }
 )
-mongoose.connection.once('open', () => console.log(`Connected to mongo at ${url}`))
+mongoose.connection.once('open',
+  () => console.log(`🦍 Connected to database: ${process.env.MONGO_DB}`)
+)

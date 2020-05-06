@@ -5,9 +5,11 @@ const typeDefs = gql`
     id: ID!
     email: String!
     password: String
-    files: [String]
+    files: [String]!
     account: Account
+    # make sure to add email notification option
   }
+ 
   type Account {
     type: String!
     subscription: String
@@ -19,18 +21,29 @@ const typeDefs = gql`
 
   type LoginData {
     id: ID!
+    userId: ID!
     email: String!
-    files: [String]
+    files: [String]!
     account: Account
-    token: String!
-    tokenExpiration: Int!
+    accessToken: String!
+    refreshToken: String!
+  }
+
+  type File {
+    filename: String!
+    content: String
   }
   type Query {
-    login(email: String!, password: String!): LoginData!
+    getFiles: [File]
+    getUser: User
   }
 
   type Mutation {
+    login(email: String!, password: String!): LoginData!
     createUser(email: String!, password: String!): User
+    uploadFile(file: Upload!): Boolean
+    deleteFile(file: String!): Boolean
+    updateFile(file: String!): Boolean
   }
 `
 

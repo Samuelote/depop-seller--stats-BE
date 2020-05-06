@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs')
 const User = require('../../models/user')
 
 module.exports = {
-
   Mutation: {
     createUser: async (_, args) => {
       try {
