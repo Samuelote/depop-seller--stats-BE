@@ -5,13 +5,13 @@ const { createAccessToken, createRefreshToken } = require('./util')
 module.exports = {
   Query: {
     getUser: async (_, __, { req }) => {
-      if (req.payload) {
+      try {
         const user = await User.findOne({ email: req.payload.email })
         return {
           ...user.toObject(),
           id: user.toObject()._id
         }
-      } else {
+      } catch {
         throw new Error('not authenticated')
       }
     }
@@ -19,13 +19,16 @@ module.exports = {
   Mutation: {
     login: async (_, { email, password }) => {
       // Gets user from db
-      const user = await User.findOne({ email })
-      if (!user) {
+      try {
+        var user = await User.findOne({ email })
+      } catch {
         throw new Error('User does not exist')
       }
-      // Compares password hashes
-      const isEqual = await bcrypt.compare(password, user.password)
-      if (!isEqual) {
+
+      try {
+        // Compares password hashes
+        await bcrypt.compare(password, user.password)
+      } catch {
         throw new Error('Password is incorrect')
       }
       // Creates Token
@@ -34,8 +37,8 @@ module.exports = {
         ...user.toObject(),
         email,
         userId: user.id,
-        accessToken: token
-        // refreshToken: createRefreshToken(user)
+        accessToken: token,
+        refreshToken: createRefreshToken(user)
       }
     }
 
